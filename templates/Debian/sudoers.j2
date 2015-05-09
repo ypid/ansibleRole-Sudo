@@ -1,0 +1,99 @@
+# {{ ansible_managed }}
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+# Defaults:
+# env_reset - resets the terminal environment after switching to root. So, ie: all user set variables are removed.
+
+{% if sudo_main_cfg.Defaults is defined %}
+{% for item in sudo_main_cfg.Defaults %}
+Defaults        {{item}}
+{% endfor %}
+{% endif %}
+
+
+# Host alias specification
+#
+# A host alias is a list of hostname, ip addresses, networks and netgroups (prefixed with a +).
+# If you do not specify a netmask with a network the netmask of the hosts ethernet interface(s)
+# will be used when matching.
+{% if sudo_main_cfg.HostAlias is defined %}
+{% for item in sudo_main_cfg.HostAlias %}
+Host_Alias      {{item}}
+{% endfor %}
+{% endif %}
+
+
+# User alias specification
+#
+# User aliases are used to specify groups of users. You can specify usernames,
+# system groups (prefixed by a %) and netgroups (prefixed by a +).
+{% if sudo_main_cfg.UserAlias is defined %}
+{% for item in sudo_main_cfg.UserAlias %}
+User_Alias      {{item}}
+{% endfor %}
+{% endif %}
+
+
+# Cmnd alias specification
+#
+# Command aliases are lists of commands and directories. You can use this to specify a group of commands.
+# If you specify a directory it will include any file within that directory but not in any subdirectories.
+# The special command '"sudoedit"' allows users to run sudo with the -e flag or as the command sudoedit.
+# If you include command line arguments in a command in an alias these must exactly match what the user
+# enters on the command line. If you include any of the following they will need to be escaped with a backslash (\):
+# ",", "\", ":", "=".
+{% if sudo_main_cfg.CmndAlias is defined %}
+{% for item in sudo_main_cfg.CmndAlias %}
+Cmnd_Alias      {{item}}
+{% endfor %}
+{% endif %}
+
+
+# User privilege specification
+#
+# User Specifications are where the sudoers file sets who can run what as who.
+# It is the key part of the file and all the aliases have just been set up for this very point. If this was a
+# film this part is where all the key threads of the story come together in the glorious unveiling before the
+# final climatic ending. Basically it is important and without this you ain't going anywhere.
+# 
+# A user specification is in the format:
+# 
+# <user list> <host list> = <operator list> <tag list> <command list>
+# 
+# The user list is a list of users or a user alias that has already been set, the host list is a list
+# of hosts or a host alias, the operator list is a list of users they must be running as or a runas alias
+# and the command list is a list of commands or a cmnd alias.
+{% for item in sudo_main_cfg.UserPriv %}
+{{item}}
+{% endfor %}
+
+
+# Runas Aliases
+#
+# Runas Aliases are almost the same as user aliases but you are allowed to specify
+# users by uid's. This is helpful as usernames and groups are matched as strings so
+# two users with the same uid but different usernames will not be matched by entering
+# a single username but can be matched with a uid.
+{% if sudo_main_cfg.RunasAlias is defined %}
+{% for item in sudo_main_cfg.RunasAlias %}
+Runas_Alias     {{item}}
+{% endfor %}
+{% endif %}
+
+
+# Members of the admin group may gain root privileges
+%admin          ALL=(ALL) ALL
+
+
+# Allow members of group sudo to execute any command
+%sudo           ALL=(ALL:ALL) ALL
+
+
+# See sudoers(5) for more information on "#include" directives:
+#includedir /etc/sudoers.d

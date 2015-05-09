@@ -1,0 +1,7 @@
+---
+- name: Debian | Copy the main /etc/sudoers file
+  template: >
+   src=Debian/sudoers.j2
+   dest=/etc/sudoers
+   validate='visudo -cf %s'
+   owner=root group=root mode=0440
