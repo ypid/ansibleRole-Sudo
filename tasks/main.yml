@@ -2,7 +2,7 @@
 - name: Check for supported operating system on target
   fail:
     msg: "The operating system of the target machine ({{ inventory_hostname }}) is not currently supported or tested."
-  when: ansible_distribution != 'Ubuntu' or ansible_distribution_version not in ['12.04', '14.04']
+  when: ansible_distribution != 'Ubuntu' or ansible_distribution_release not in ['precise', 'trusty']
 
 - name: Include Debian specific tasks
   include: Debian.yml
