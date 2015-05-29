@@ -1,8 +1,9 @@
 Sudo
 =========
 
-This role currently manages the sudoers file (not the sudoers.d).
-Default behaviour is to construct the default clean OS sudoers file.
+This role currently manages the sudoers file.
+Default behaviour is not to touch the remote unless the
+variable sudoers_cfg is defined. 
 
 Ubuntu good start point:
 
@@ -12,22 +13,21 @@ Ubuntu good start point:
 Role Variables
 --------------
 
-This role uses only one variable to construct the sudoers file, in general
-the variable 'sudo_main_cfg' should be set in group_vars although it can
-be used in host_vars as well.
+This role uses only one variable to construct the sudoers file.
+You can set the variable 'sudoers_cfg' in group_vars or host_vars
+based on your needs.
 
-sudo_main_cfg
+
+sudoers_cfg
 
 The variable structure includes the sections below and can inclue multiple
-entries per section or none except UserPriv that in general set to
-
-'root       ALL=(ALL:ALL) ALL'.
+entries per section please see example below.
 
 	* Defaults
 	* HostAlias
 	* UserAlias
 	* CmndAlias
-	* UserPriv (REQUIRED)
+	* UserPriv
 	* RunasAlias
 
 
@@ -47,7 +47,7 @@ Play on all nodes
 Example group_vars/prod-example-org.yml defenition:
 
 ```
-sudo_main_cfg:
+sudoers_cfg:
  Defaults:
   - env_reset
   - editor=/usr/bin/vi
@@ -69,7 +69,6 @@ sudo_main_cfg:
   - 'ADMIN_CMDS = /usr/sbin/passwd, /usr/sbin/useradd, /usr/sbin/userdel, /usr/sbin/usermod, /usr/sbin/visudo'
   - 'WEB_CMDS = /etc/init.d/apache2'
  UserPriv:
-  - 'root       ALL=(ALL:ALL) ALL'
   - 'ADMINS     ALL=(ALL) NOPASSWD: ALL'
   - 'WEBMASTERS webserver= WEB_CMDS'
   - 'USERS      WORKSTATIONS=(ADMINS) ADMIN_CMDS'
@@ -77,7 +76,7 @@ sudo_main_cfg:
 ```
 
 
-The result file from the defenition above (without comments and additional info)
+The result file from the defenition above (Note user root is not touched and hadcoded in the template)
 
 ```
 	Defaults        env_reset

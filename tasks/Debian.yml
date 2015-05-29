@@ -5,3 +5,4 @@
    dest=/etc/sudoers
    validate='visudo -cf %s'
    owner=root group=root mode=0440
+  when: sudoers_cfg is defined

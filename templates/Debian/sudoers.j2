@@ -9,11 +9,14 @@
 #
 # Defaults:
 # env_reset - resets the terminal environment after switching to root. So, ie: all user set variables are removed.
-
-{% if sudo_main_cfg.Defaults is defined %}
-{% for item in sudo_main_cfg.Defaults %}
+{% if sudoers_cfg.Defaults is defined %}
+{% for item in sudoers_cfg.Defaults %}
 Defaults        {{item}}
 {% endfor %}
+{% else %}
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 {% endif %}
 
 
@@ -22,8 +25,8 @@ Defaults        {{item}}
 # A host alias is a list of hostname, ip addresses, networks and netgroups (prefixed with a +).
 # If you do not specify a netmask with a network the netmask of the hosts ethernet interface(s)
 # will be used when matching.
-{% if sudo_main_cfg.HostAlias is defined %}
-{% for item in sudo_main_cfg.HostAlias %}
+{% if sudoers_cfg.HostAlias is defined %}
+{% for item in sudoers_cfg.HostAlias %}
 Host_Alias      {{item}}
 {% endfor %}
 {% endif %}
@@ -33,8 +36,8 @@ Host_Alias      {{item}}
 #
 # User aliases are used to specify groups of users. You can specify usernames,
 # system groups (prefixed by a %) and netgroups (prefixed by a +).
-{% if sudo_main_cfg.UserAlias is defined %}
-{% for item in sudo_main_cfg.UserAlias %}
+{% if sudoers_cfg.UserAlias is defined %}
+{% for item in sudoers_cfg.UserAlias %}
 User_Alias      {{item}}
 {% endfor %}
 {% endif %}
@@ -48,8 +51,8 @@ User_Alias      {{item}}
 # If you include command line arguments in a command in an alias these must exactly match what the user
 # enters on the command line. If you include any of the following they will need to be escaped with a backslash (\):
 # ",", "\", ":", "=".
-{% if sudo_main_cfg.CmndAlias is defined %}
-{% for item in sudo_main_cfg.CmndAlias %}
+{% if sudoers_cfg.CmndAlias is defined %}
+{% for item in sudoers_cfg.CmndAlias %}
 Cmnd_Alias      {{item}}
 {% endfor %}
 {% endif %}
@@ -69,9 +72,12 @@ Cmnd_Alias      {{item}}
 # The user list is a list of users or a user alias that has already been set, the host list is a list
 # of hosts or a host alias, the operator list is a list of users they must be running as or a runas alias
 # and the command list is a list of commands or a cmnd alias.
-{% for item in sudo_main_cfg.UserPriv %}
+root    ALL=(ALL:ALL) ALL
+{% if sudoers_cfg.UserPriv is defined %}
+{% for item in sudoers_cfg.UserPriv %}
 {{item}}
 {% endfor %}
+{% endif %}
 
 
 # Runas Aliases
@@ -80,8 +86,8 @@ Cmnd_Alias      {{item}}
 # users by uid's. This is helpful as usernames and groups are matched as strings so
 # two users with the same uid but different usernames will not be matched by entering
 # a single username but can be matched with a uid.
-{% if sudo_main_cfg.RunasAlias is defined %}
-{% for item in sudo_main_cfg.RunasAlias %}
+{% if sudoers_cfg.RunasAlias is defined %}
+{% for item in sudoers_cfg.RunasAlias %}
 Runas_Alias     {{item}}
 {% endfor %}
 {% endif %}
