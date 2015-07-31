@@ -2,8 +2,8 @@ Sudo
 =========
 
 This role currently manages the sudoers file.
-Default behaviour is not to touch the remote unless the
-variable sudoers_cfg is defined. 
+Default behavior is not to touch the remote unless the
+variable `sudoers_cfg` is defined.
 
 Ubuntu good start point:
 
@@ -14,13 +14,13 @@ Role Variables
 --------------
 
 This role uses only one variable to construct the sudoers file.
-You can set the variable 'sudoers_cfg' in group_vars or host_vars
+You can set the variable `sudoers_cfg` in group_vars or host_vars
 based on your needs.
 
 
 sudoers_cfg
 
-The variable structure includes the sections below and can inclue multiple
+The variable structure includes the sections below and can include multiple
 entries per section please see example below.
 
 	* Defaults
@@ -44,7 +44,7 @@ Play on all nodes
 ```
 
 
-Example group_vars/prod-example-org.yml defenition:
+Example group_vars/prod-example-org.yml definition:
 
 ```
 sudoers_cfg:
@@ -76,38 +76,38 @@ sudoers_cfg:
 ```
 
 
-The result file from the defenition above (Note user root is not touched and hadcoded in the template)
+The result file from the definition above (Note user root is not touched and hardcoded in the template).
 
 ```
-	Defaults        env_reset
-	Defaults        editor=/usr/bin/vi
-	Defaults        mail_badpass
-	Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Defaults        env_reset
+Defaults        editor=/usr/bin/vi
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-	Host_Alias      SERVERS = 192.168.0.1, 192.168.0.2, server1
+Host_Alias      SERVERS = 192.168.0.1, 192.168.0.2, server1
 
-	User_Alias      ADMINS = %admin,+admin
-	User_Alias      USERS = tom, SpongeBob, harry
-	User_Alias      WEBMASTERS = tom, mary
-	User_Alias      LIMITED_USERS = USERS, !WEBMASTERS, !ADMINS
+User_Alias      ADMINS = %admin,+admin
+User_Alias      USERS = tom, SpongeBob, harry
+User_Alias      WEBMASTERS = tom, mary
+User_Alias      LIMITED_USERS = USERS, !WEBMASTERS, !ADMINS
 
-	Cmnd_Alias      SHUTDOWN_CMDS = /sbin/poweroff, /sbin/reboot, /sbin/halt
-	Cmnd_Alias      PRINTING_CMDS = /usr/sbin/lpc, /usr/sbin/lprm
-	Cmnd_Alias      ADMIN_CMDS = /usr/sbin/passwd, /usr/sbin/useradd, /usr/sbin/userdel, /usr/sbin/usermod, /usr/sbin/visudo
-	Cmnd_Alias      WEB_CMDS = /etc/init.d/apache2
+Cmnd_Alias      SHUTDOWN_CMDS = /sbin/poweroff, /sbin/reboot, /sbin/halt
+Cmnd_Alias      PRINTING_CMDS = /usr/sbin/lpc, /usr/sbin/lprm
+Cmnd_Alias      ADMIN_CMDS = /usr/sbin/passwd, /usr/sbin/useradd, /usr/sbin/userdel, /usr/sbin/usermod, /usr/sbin/visudo
+Cmnd_Alias      WEB_CMDS = /etc/init.d/apache2
 
-	root       ALL=(ALL:ALL) ALL
-	ADMINS     ALL=(ALL) NOPASSWD: ALL
-	WEBMASTERS webserver= WEB_CMDS
-	USERS      WORKSTATIONS=(ADMINS) ADMIN_CMDS
-	ALL        ALL=(ALL) NOPASSWD: PRINTING_CMDS
+root       ALL=(ALL:ALL) ALL
+ADMINS     ALL=(ALL) NOPASSWD: ALL
+WEBMASTERS webserver= WEB_CMDS
+USERS      WORKSTATIONS=(ADMINS) ADMIN_CMDS
+ALL        ALL=(ALL) NOPASSWD: PRINTING_CMDS
 
-	Runas_Alias     ROOT = #0
-	Runas_Alias     ADMINS = %admin, root
+Runas_Alias     ROOT = #0
+Runas_Alias     ADMINS = %admin, root
 
-	%admin          ALL=(ALL) ALL
+%admin          ALL=(ALL) ALL
 
-	%sudo           ALL=(ALL:ALL) ALL
+%sudo           ALL=(ALL:ALL) ALL
 ```
 
 
